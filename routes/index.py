@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request # type: ignore
 import PyPDF2 as pdf # type: ignore
+from transformers import pipeline
 
 api_blueprint = Blueprint('api', __name__);
 
@@ -29,5 +30,19 @@ def handle_upload():
 
     data = {"fileContent": file_string}
     return jsonify(data);
+
+@api_blueprint.route('/summarize', methods=['POST'])
+def summarize():
+    # Get the input article from the request
+    data = request.get_json()
+    article = data['article']
+
+    # Perform summarization
+    summarizer = pipeline("summarization")
+    summary = summarizer(article, max_length=0.5*len(article), min_length=0.4*len(article), do_sample=False)
+
+    # Return the summary as JSON
+    return jsonify({'summary': summary[0]['summary_text']})
+
 
 

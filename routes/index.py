@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify, request
-import PyPDF2 as pdf
+from flask import Blueprint, jsonify, request # type: ignore
+import PyPDF2 as pdf # type: ignore
 
 api_blueprint = Blueprint('api', __name__);
 
